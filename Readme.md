@@ -1,3 +1,8 @@
+# Hinweis
+Dies ist eine Weiterentwicklung, das Orginal siehe hier:
+[BOGY-App-2022-10](https://github.com/BogyMitutoyoCTL/BOGY-App-2022-10/).
+
+
 # Lern-App 2022.2
 
 Elektronik-Symbole oder Messtechnik-Symbole erlernen mit einer App für Smartphones 📱.
