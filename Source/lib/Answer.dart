@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, unused_import, file_names
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, file_names
 
 import 'package:flutter/material.dart';
 import 'package:learnhub/Answer.dart';
@@ -69,8 +69,9 @@ class _AnswerState extends State<Answer> {
                   if (!widget.playing.getActQuestion().isMultipleChoiceQuestion)
                     Container(
                       height: 50,
+                      width: MediaQuery.of(context).size.width - 20,
                       decoration: BoxDecoration(
-                          color: farbe[4],
+                          color: Colors.transparent,
                           border: Border.all(color: farbe[4]),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: Padding(
@@ -81,17 +82,23 @@ class _AnswerState extends State<Answer> {
                         ),
                       ),
                     ),
-                  if (!widget.playing.getActQuestion().isMultipleChoiceQuestion)
+                  if (!widget.playing
+                          .getActQuestion()
+                          .isMultipleChoiceQuestion &&
+                      !widget.playing
+                          .getActQuestion()
+                          .isAnswerCorrect(widget.input))
                     Container(
                       height: 50,
+                      width: MediaQuery.of(context).size.width - 20,
                       decoration: BoxDecoration(
-                          color: farbe[4],
-                          border: Border.all(color: farbe[4]),
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.green),
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text(
-                          widget.input,
+                          widget.answers[0],
                           style: TextStyle(fontSize: 30),
                         ),
                       ),
@@ -224,9 +231,15 @@ class _AnswerState extends State<Answer> {
       Colors.black
     ];
     list[widget.ID] = Colors.red;
-    for (int i = 0; i < 4; i++) {
-      if (questionBasic.isAnswerCorrect(widget.answers[i])) {
-        list[i] = Colors.green;
+    if (questionBasic.isMultipleChoiceQuestion) {
+      for (int i = 0; i < 4; i++) {
+        if (questionBasic.isAnswerCorrect(widget.answers[i])) {
+          list[i] = Colors.green;
+        }
+      }
+    } else {
+      if (questionBasic.isAnswerCorrect(widget.input)) {
+        list[4] = Colors.green;
       }
     }
 

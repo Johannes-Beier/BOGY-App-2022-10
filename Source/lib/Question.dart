@@ -59,10 +59,7 @@ class _QuestionState extends State<Question> {
   @override
   Widget build(BuildContext context) {
     question = questionName();
-
-    if (widget.isMultipleChoice) {
-      answers = getAnswers();
-    }
+    answers = getAnswers();
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -288,15 +285,26 @@ class _QuestionState extends State<Question> {
   List<String> getAnswers() {
     QuestionBasic questionBasic =
         widget.playing.stack.getQuestion(widget.playing.questionIndex);
-    List<String> answer;
-    if (questionBasic.isPictureQuestion) {
+    List<String> answer = [];
+    if (questionBasic.isPictureQuestion &&
+        questionBasic.isMultipleChoiceQuestion) {
       QuestionImageAndSingleChoice questionImageAndSingleChoice =
           questionBasic as QuestionImageAndSingleChoice;
       answer = [...questionImageAndSingleChoice.answers];
-    } else {
+    } else if (!questionBasic.isPictureQuestion &&
+        questionBasic.isMultipleChoiceQuestion) {
       QuestionStringAndAnswers questionStringAndAnswers =
           questionBasic as QuestionStringAndAnswers;
       answer = [...questionStringAndAnswers.answers];
+    } else if (!questionBasic.isPictureQuestion &&
+        !questionBasic.isMultipleChoiceQuestion) {
+      QuestionStringAndFreeText questionStringAndFreeText =
+          questionBasic as QuestionStringAndFreeText;
+      answer.add(questionStringAndFreeText.answer);
+    } else {
+      QuestionImageAndFreeText questionImageAndFreeText =
+          questionBasic as QuestionImageAndFreeText;
+      answer.add(questionImageAndFreeText.answer);
     }
     answer.shuffle();
     return answer;
