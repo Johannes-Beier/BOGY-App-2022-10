@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, file_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:learnhub/Answer.dart';
 import 'package:learnhub/DataHelper/CurrentlyPlaying.dart';
@@ -8,6 +10,8 @@ import 'package:learnhub/Score.dart';
 import 'package:vibration/vibration.dart';
 import 'DataHelper/DataHelper.dart';
 import 'DataHelper/QuestionBasic.dart';
+import 'DataHelper/QuestionImageAndFreeText.dart';
+import 'DataHelper/QuestionImageAndSingleChoice.dart';
 import 'DataHelper/QuestionStack.dart';
 import 'DataHelper/QuestionStringAndAnswers.dart';
 import 'DataHelper/QuestionStringAndFreeText.dart';
@@ -57,12 +61,38 @@ class _AnswerState extends State<Answer> {
             body: ListView(
               children: [
                 Column(children: [
-                  /*if (_questionType) Image.asset("assets/images/Logo.png"),*/
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child:
-                        Text(widget.question, style: TextStyle(fontSize: 40)),
-                  ),
+                  if (widget.playing.getActQuestion().isPictureQuestion &&
+                      !widget.playing.getActQuestion().isMultipleChoiceQuestion)
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Image(
+                          width: 250,
+                          image: Image.memory(base64Decode((widget.playing.stack
+                                          .getQuestion(
+                                              widget.playing.questionIndex)
+                                      as QuestionImageAndFreeText)
+                                  .imageString))
+                              .image),
+                    ),
+                  if (widget.playing.getActQuestion().isPictureQuestion &&
+                      widget.playing.getActQuestion().isMultipleChoiceQuestion)
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Image(
+                          width: 250,
+                          image: Image.memory(base64Decode((widget.playing.stack
+                                          .getQuestion(
+                                              widget.playing.questionIndex)
+                                      as QuestionImageAndSingleChoice)
+                                  .imageString))
+                              .image),
+                    ),
+                  if (!widget.playing.getActQuestion().isPictureQuestion)
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child:
+                          Text(widget.question, style: TextStyle(fontSize: 40)),
+                    ),
                   Padding(
                     padding: EdgeInsets.all(10),
                   ),
